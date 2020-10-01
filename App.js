@@ -59,7 +59,7 @@ async function create() {
   });
 }
 
-const App: () => React$Node = () => {
+const App = () => {
   openRealm();
   return (
     <View style={styles.container}>

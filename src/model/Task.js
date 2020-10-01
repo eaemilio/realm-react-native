@@ -1,10 +1,11 @@
 import {ObjectId} from 'bson';
 
 class Task {
-  constructor({title, status = Task.STATUS_OPEN, id = new ObjectId()}) {
+  constructor({title, status = Task.STATUS_OPEN, id = new ObjectId(), partitionValue}) {
     this._id = id;
     this.title = title;
     this.status = status;
+    this._partitionValue = partitionValue;
   }
 
   static STATUS_OPEN = 'Open';
@@ -17,6 +18,7 @@ class Task {
       _id: 'objectId',
       title: 'string',
       status: 'string',
+      _partitionValue: 'string'
     },
     primaryKey: '_id',
   };
