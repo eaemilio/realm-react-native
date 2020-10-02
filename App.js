@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import {Button, Alert, StyleSheet, View} from 'react-native';
 
 import Realm from 'realm';
@@ -34,33 +34,43 @@ async function openRealm() {
   try {
     await anonymousLogin();
     const config = {
-      schema: [Task],
+      schema: [Task.schema],
       sync: {
         user: user,
-        partitionValue: 'instore',
+        partitionValue: 'insotreadmin-jtmoy'
       },
     };
     realm = await Realm.open(config);
     console.log('REALM OPEN SUCCEED');
-    console.log(realm);
   } catch (error) {
-    throw `Error opening realm: ${JSON.stringify(error, null, 2)}`;
+    console.log(error);
   }
 }
 
 async function create() {
   realm.write(() => {
-    realm.create('Task', {
-      _id: new ObjectId(),
-      title: 'go grocery shopping',
-      status: 'Open',
-      _partition: '',
-    });
+    const task = {
+      title: 'Manolo',
+      status: 'open',
+      _partitionValue: 'insotreadmin-jtmoy',
+      _id: new ObjectId()
+    };
+    const newTask = realm.create('Task', task);
+    console.log(realm.objects('Task'))
   });
 }
 
+function getTasks() {
+  if (realm) {
+    const tasks = realm.objects('Task');
+    console.log(tasks);
+  }
+}
+
 const App = () => {
-  openRealm();
+  useEffect(() => {
+    openRealm();
+  }, []);
   return (
     <View style={styles.container}>
       <Button title="create" color="#000" onPress={create} />
